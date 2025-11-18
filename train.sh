@@ -1,0 +1,38 @@
+
+deepspeed --include localhost:0,1,2,3 train.py \
+    --model # replace with your base model name or path \
+    --dataset_json_path  ./data_path.json \
+    --seed 42 \
+    --use_deepspeed True \
+    --target_modules gate_proj up_proj down_proj \
+    --data_nums 3000 \
+    --lora_r 8 \
+    --lora_alpha 16 \
+    --attn_dim 256 \
+    --expert_vector_dim 256 \
+    --top_k_routing_strategy True \
+    --num_experts 5 \
+    --dropout 0.1 \
+    --use_div_loss True \
+    --use_sim_loss True \
+    --beta_s 1.0 \
+    --beta_d 1.5 \
+    --lambda_auxiliary 0.01 \
+    --save_dir ./output/ \
+    --output_dir ./output/ \
+    --deepspeed ds_2.json \
+    --num_train_epochs 2 \
+    --per_device_train_batch_size 5 \
+    --per_device_eval_batch_size 5 \
+    --gradient_accumulation_steps 5 \
+    --learning_rate 5e-5 \
+    --lr_scheduler_type constant_with_warmup \
+    --weight_decay 1e-2 \
+    --warmup_steps 100 \
+    --logging_strategy steps \
+    --logging_steps 20 \
+    --evaluation_strategy steps \
+    --eval_steps 1000 \
+    --save_total_limit 1 \
+    --bf16 True \
+    --remove_unused_columns False
